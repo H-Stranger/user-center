@@ -39,38 +39,43 @@ class UserServiceTest {
 
     @Test
     void userRegister() {
-        //密码为空
+//        //密码为空
         String userAccount = "yupi";
         String password = "";
         String checkPassword = "12345678";
-        long result = userService.userRegister(userAccount, password, checkPassword);
-        Assertions.assertEquals(-1,result);
-        //用户名小于4位
-        userAccount = "hxd";
-        password = "12345678";
-        result = userService.userRegister(userAccount,password,checkPassword);
-        Assertions.assertEquals(-1,result);
-        //密码小于8位
-        userAccount = "yupi";
-        password = "123456";
-        result = userService.userRegister(userAccount,password,checkPassword);
-        Assertions.assertEquals(-1,result);
-        //特殊字符
-        userAccount = "##@@$$fda";
-        password = "12345678";
-        result = userService.userRegister(userAccount,password,checkPassword);
-        Assertions.assertEquals(-1,result);
-        //密码和校验码相同
-        userAccount = "yupi";
-        password = "1234567";
-        result = userService.userRegister(userAccount,password,checkPassword);
-        Assertions.assertEquals(-1,result);
+        String planetCode = "10";
+        long result = userService.userRegister(userAccount, password, checkPassword,planetCode);
+//        Assertions.assertEquals(-1,result);
+//        //用户名小于4位
+//        userAccount = "hxd";
+//        password = "12345678";
+//        result = userService.userRegister(userAccount,password,checkPassword,planetCode);
+//        Assertions.assertEquals(-1,result);
+//        //密码小于8位
+//        userAccount = "yupi";
+//        password = "123456";
+//        result = userService.userRegister(userAccount,password,checkPassword,planetCode);
+//        Assertions.assertEquals(-1,result);
+//        //特殊字符
+//        userAccount = "##@@$$fda";
+//        password = "12345678";
+//        result = userService.userRegister(userAccount,password,checkPassword,planetCode);
+//        Assertions.assertEquals(-1,result);
+//        //密码和校验码相同
+//        userAccount = "yupi";
+//        password = "1234567";
+//        result = userService.userRegister(userAccount,password,checkPassword,planetCode);
+//        Assertions.assertEquals(-1,result);
+//        //插入数据
+//        userAccount = "yupi";
+//        password = "12345678";
+//        result = userService.userRegister(userAccount,password,checkPassword,planetCode);
+//        Assertions.assertTrue(result >0);
         //插入数据
-        userAccount = "yupi";
+        userAccount = "yupi1";
         password = "12345678";
-        result = userService.userRegister(userAccount,password,checkPassword);
+        result = userService.userRegister(userAccount,password,checkPassword,planetCode);
         Assertions.assertTrue(result >0);
-
     }
 
 

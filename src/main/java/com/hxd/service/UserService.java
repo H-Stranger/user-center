@@ -12,12 +12,14 @@ import jakarta.servlet.http.HttpServletRequest;
 public interface UserService extends IService<User> {
     /**
      * 用户注册
-     * @param userAccount 用户账号
-     * @param password 用户密码
+     *
+     * @param userAccount   用户账号
+     * @param password      用户密码
      * @param checkPassword 用户校验码
+     * @param planetCode    星球编号
      * @return 新用户id
      */
-    long userRegister(String userAccount,String password,String checkPassword);
+    long userRegister(String userAccount, String password, String checkPassword, String planetCode);
 
     /**
      * 用户登录
@@ -26,4 +28,19 @@ public interface UserService extends IService<User> {
      * @return 用户实体
      */
     User doLogin(String userAccount, String password, HttpServletRequest request);
+
+    /**
+     * 用户信息脱敏
+     * @param originUser 原来用户信息
+     * @return safetyUser 脱敏后信息
+     */
+    User getSafetyUser(User originUser);
+
+    /**
+     * 用户注销功能
+     *
+     * @param request
+     * @return 注销成功标记
+     */
+    int userLogout(HttpServletRequest request);
 }

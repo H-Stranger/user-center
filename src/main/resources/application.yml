@@ -7,6 +7,9 @@ spring:
     url: jdbc:mysql://localhost:3306/hxd_center
     username: root
     password: hxd040515
+  # invalid time one day
+  session:
+    timeout: 86400
 
 server:
   port: 8080

@@ -14,6 +14,8 @@ import org.springframework.util.DigestUtils;
 
 import java.nio.charset.StandardCharsets;
 
+import static com.hxd.constant.UserConstant.USER_LOGIN_STATE;
+
 /**
 * @author hxd15
 * @description 针对表【user(用户)】的数据库操作Service实现
@@ -25,12 +27,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Resource
     private UserMapper userMapper;
     private static final String SALT = "hxd";
-    private static final String USER_LOGIN_STATE = "userLoginState";
 
     @Override
-    public long userRegister(String userAccount, String password, String checkPassword) {
+    public long userRegister(String userAccount, String password, String checkPassword, String planetCode) {
         //1.1校验三项是否为空
-        if(StringUtils.isAnyBlank(userAccount,password,checkPassword)){
+        if(StringUtils.isAnyBlank(userAccount,password,checkPassword,planetCode)){
             //任何一个为空
             //todo 修改为自定义异常
             return -1;
@@ -39,6 +40,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return -1;
         }
         if(password.length() < 8 || checkPassword.length() < 8){
+            return -1;
+        }
+        if(planetCode.length() > 5) {
             return -1;
         }
         //1.3账户不能包含特殊字符
@@ -61,6 +65,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(count > 0){
             return -1;
         }
+        //校验码不能重复
+        userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("planetCode",planetCode);
+        count = userMapper.selectCount(userQueryWrapper);
+        if(count > 0){
+            return -1;
+        }
         //2加密
 //        final String SALT = "hxd";
         String encryptPassword = DigestUtils.md5DigestAsHex((SALT + password).getBytes(StandardCharsets.UTF_8));
@@ -68,6 +79,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = new User();
         user.setUserAccount(userAccount);
         user.setUserPassword(encryptPassword);
+        user.setPlanetCode(planetCode);
         //save会把数据库自动添加的id回传
         boolean res = this.save(user);
         //传入失败则id为null，函数返回的是long，所以判断是否为null的情况
@@ -110,20 +122,38 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return null;
         }
         //3用户信息脱敏
-        User safetyUser = new User();
-        safetyUser.setId(user.getId());
-        safetyUser.setUsername(user.getUsername());
-        safetyUser.setUserAccount(user.getUserAccount());
-        safetyUser.setAvatarUrl(user.getAvatarUrl());
-        safetyUser.setGender(user.getGender());
-        safetyUser.setPhone(user.getPhone());
-        safetyUser.setEmail(user.getEmail());
-        safetyUser.setUserStatus(user.getUserStatus());
-        safetyUser.setCreateTime(user.getCreateTime());
+        User safetyUser = getSafetyUser(user);
         //4记录用户的登录态
         request.getSession().setAttribute(USER_LOGIN_STATE,safetyUser);
 
         return safetyUser;
+    }
+
+    @Override
+    public User getSafetyUser(User originUser){
+        if(originUser == null){
+            return null;
+        }
+        User safetyUser = new User();
+        safetyUser.setId(originUser.getId());
+        safetyUser.setUsername(originUser.getUsername());
+        safetyUser.setUserAccount(originUser.getUserAccount());
+        safetyUser.setAvatarUrl(originUser.getAvatarUrl());
+        safetyUser.setGender(originUser.getGender());
+        safetyUser.setPhone(originUser.getPhone());
+        safetyUser.setEmail(originUser.getEmail());
+        safetyUser.setUserRole(originUser.getUserRole());
+        safetyUser.setUserStatus(originUser.getUserStatus());
+        safetyUser.setCreateTime(originUser.getCreateTime());
+        safetyUser.setPlanetCode(originUser.getPlanetCode());
+        return safetyUser;
+    }
+
+    @Override
+    public int userLogout(HttpServletRequest request) {
+        //移除用户登录态
+        request.getSession().removeAttribute(USER_LOGIN_STATE);
+        return 1;
     }
 }
 

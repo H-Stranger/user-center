@@ -1,3 +1,157 @@
+GET http://localhost:8080/user/search
+
+<> 2026-03-17T121531.200.json
+
+###
+
+POST http://localhost:8080/user/login
+Content-Type: application/json
+
+{
+  "userAccount": "yupi",
+  "password": "12345678"
+}
+
+<> 2026-03-17T121528.200.json
+
+###
+
+GET http://localhost:8080/user/search
+
+<> 2026-03-17T121504.200.json
+
+###
+
+POST http://localhost:8080/user/login
+Content-Type: application/json
+
+{
+  "userAccount": "yupi",
+  "password": "12345678"
+}
+
+<> 2026-03-17T121251.200.json
+
+###
+
+POST http://localhost:8080/user/login
+Content-Type: application/json
+
+{
+  "userAccount": "yupi",
+  "password": "12345678"
+}
+
+<> 2026-03-17T121005.200.json
+
+###
+
+POST http://localhost:8080/user/login
+Content-Type: application/json
+
+{
+  "userAccount": "yupi",
+  "password": "12345678"
+}
+
+###
+
+POST http://localhost:8080/user/login
+Content-Type: application/json
+
+{
+  "userAccount": "yupi",
+  "password": "12345678"
+}
+
+###
+
+POST http://localhost:8080/user/login
+Content-Type: application/json
+
+{
+  "userAccount": "yupi",
+  "password": "12345678"
+}
+
+###
+
+POST http://localhost:8080/user/login
+Content-Type: application/json
+
+{
+  "userAccount": "yupi",
+  "password": "12345678"
+}
+
+###
+
+GET http://localhost:8080/user/search
+
+<> 2026-03-17T115422.200.json
+
+###
+
+GET http://localhost:8080/user/search
+
+<> 2026-03-17T115412.200.json
+
+###
+
+GET http://localhost:8080/user/search
+
+<> 2026-03-17T115410.200.json
+
+###
+
+GET http://localhost:8080/user/search
+
+<> 2026-03-17T115408.200.json
+
+###
+
+GET http://localhost:8080/user/search
+
+<> 2026-03-17T115317.200.json
+
+###
+
+GET http://localhost:8080/user/search
+
+<> 2026-03-17T115304.200.json
+
+###
+
+POST http://localhost:8080/user/login
+Content-Type: application/json
+
+{
+  "userAccount": "yupi",
+  "password": "12345678"
+}
+
+###
+
+GET http://localhost:8080/user/search
+
+<> 2026-03-17T115001.200.json
+
+###
+
+GET http://localhost:8080/user/search
+
+###
+
+POST http://localhost:8080/user/login
+Content-Type: application/json
+
+{
+  "userAccount": "yupi",
+  "password": "12345678"
+}
+
+###
+
 POST http://localhost:8080/user/login
 Content-Type: application/json
 
@@ -20,11 +174,6 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:8080/user/login
-Content-Type: application/json
+GET http://localhost:8080/user/search
 
-{
-  "userAccount": "yupi",
-  "password": "12345678"
-}
 
