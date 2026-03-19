@@ -2,7 +2,11 @@ package com.hxd.controller;
 
 import ch.qos.logback.classic.spi.EventArgUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.hxd.common.BaseResponse;
+import com.hxd.common.ErrorCode;
 import com.hxd.common.Result;
+import com.hxd.common.ResultUtils;
+import com.hxd.exception.BusinessException;
 import com.hxd.model.User;
 import com.hxd.model.request.UserLoginRequest;
 import com.hxd.model.request.UserRegisterRequest;
@@ -28,9 +32,11 @@ public class UserController {
 
     @PostMapping("/register")
     //将零散的参数封装为请求类
-    public Result userRegister(@RequestBody UserRegisterRequest userRegisterRequest){
+    public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest){
         if(userRegisterRequest == null) {
-            return Result.error("未发送用户注册请求");
+//            return Result.error("未发送用户注册请求");
+//            return null;
+            throw new BusinessException(ErrorCode.NULL_ERROR);
         }
         //查看内容是否为空
         String userAccount = userRegisterRequest.getUserAccount();
@@ -38,23 +44,26 @@ public class UserController {
         String checkPassword = userRegisterRequest.getCheckPassword();
         String planetCode = userRegisterRequest.getPlanetCode();
         if(StringUtils.isAnyBlank(userAccount,password,checkPassword,planetCode)){
-            return Result.error("注册请求参数为空");
+//            return Result.error("注册请求参数为空");
+            throw new BusinessException(ErrorCode.NULL_ERROR);
         }
         long id = userService.userRegister(userAccount, password, checkPassword, planetCode);
-        return Result.success(id);
+        return ResultUtils.success(id);
     }
     @PostMapping("/login")
-    public Result userLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest httpServletRequest){
+    public BaseResponse<User> userLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest httpServletRequest){
         if(userLoginRequest == null){
-            return Result.error("未发送登录请求");
+//            return Result.error("未发送登录请求");
+            return null;
         }
         String userAccount = userLoginRequest.getUserAccount();
         String password = userLoginRequest.getPassword();
         if(StringUtils.isAnyBlank(userAccount,password)){
-            return Result.error("登录请求参数为空");
+//            return Result.error("登录请求参数为空");
+            return null;
         }
         User user = userService.doLogin(userAccount, password, httpServletRequest);
-        return Result.success(user);
+        return ResultUtils.success(user);
     }
     @PostMapping("/logout")
     public Result userLogout(HttpServletRequest request){

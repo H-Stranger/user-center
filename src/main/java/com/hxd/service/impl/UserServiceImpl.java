@@ -2,6 +2,8 @@ package com.hxd.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hxd.common.ErrorCode;
+import com.hxd.exception.BusinessException;
 import com.hxd.model.User;
 import com.hxd.service.UserService;
 import com.hxd.mapper.UserMapper;
@@ -34,26 +36,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if(StringUtils.isAnyBlank(userAccount,password,checkPassword,planetCode)){
             //任何一个为空
             //todo 修改为自定义异常
-            return -1;
+            throw new BusinessException(ErrorCode.NULL_ERROR,"参数为空");
         }
         if(userAccount.length() < 4){
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"账号小于4位");
         }
         if(password.length() < 8 || checkPassword.length() < 8){
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"密码或者校验码小于8位");
         }
         if(planetCode.length() > 5) {
-            return -1;
+            throw new BusinessException(ErrorCode.NULL_ERROR,"星球编号大于5位");
         }
         //1.3账户不能包含特殊字符
         String regex = "^[a-zA-Z0-9]+$";
         boolean matches = userAccount.matches(regex);
         if(!matches){
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"账号不能包含特殊字符");
         }
         //1.4密码和校验密码相同
         if(!password.equals(checkPassword)){
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"密码和校验码相同");
         }
         //注意顺序，数据库查询放最后，性能更好
         //1.2账户不能重复
@@ -63,14 +65,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 //        long count = this.count(userQueryWrapper);
         long count = userMapper.selectCount(userQueryWrapper);
         if(count > 0){
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"账户重复");
         }
         //校验码不能重复
         userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.eq("planetCode",planetCode);
         count = userMapper.selectCount(userQueryWrapper);
         if(count > 0){
-            return -1;
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"校验码重复");
         }
         //2加密
 //        final String SALT = "hxd";
@@ -85,7 +87,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //传入失败则id为null，函数返回的是long，所以判断是否为null的情况
         //考虑直接函数返回Long
         if(!res){
-            return -1;
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR,"数据插入失败");
         }
         return user.getId();
     }
